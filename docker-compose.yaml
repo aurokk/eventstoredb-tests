@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+
+  # https://developers.eventstore.com/server/v21.10/installation.html#use-docker-compose
+  eventstore:
+    image: ghcr.io/eventstore/eventstore:21.10.5-alpha-arm64v8
+    restart: always
+    container_name: app-db
+    ports:
+      - "2113:2113"
+      - "1113:1113"
+    environment:
+      # logs
+      EVENTSTORE_CLUSTER_SIZE: 1
+      EVENTSTORE_Db: "/var/lib/eventstore"
+      EVENTSTORE_Index: "/var/lib/eventstore/index"
+      EVENTSTORE_Log: "/var/log/eventstore"
+      # common
+      EVENTSTORE_Insecure: "true"
+      EVENTSTORE_RunProjections: "All"
+      # ports
+      EVENTSTORE_IntIp: "0.0.0.0"
+      EVENTSTORE_ExtIp: "0.0.0.0"
+      EVENTSTORE_HttpPort: "2113"
+      EVENTSTORE_IntTcpPort: "1112"
+      EVENTSTORE_ExtTcpPort: "1113"
+      EVENTSTORE_EnableExternalTcp: "true"
+      EVENTSTORE_EnableAtomPubOverHTTP: "true"
+    networks:
+      - app
+
+networks:
+  app:
